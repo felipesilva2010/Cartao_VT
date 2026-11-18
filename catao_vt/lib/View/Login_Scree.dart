@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:catao_vt/View/saldo_screen.dart';
+import 'package:catao_vt/model/cartão_model.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -23,6 +24,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _entrar() {
     if (!_formKey.currentState!.validate()) return;
+
+    final cartao = CartaoModel(
+      numero: double.parse(_numeroController.text),
+      saldo: 0,
+    );
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => SaldoScreen(cartao: cartao),
+      ),
+    );
   }
 
   @override
