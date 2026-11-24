@@ -24,5 +24,6 @@ void main() {
 
     final field = tester.widget<TextFormField>(cardField);
     expect(field.controller!.text, '1234');
+
   });
 }

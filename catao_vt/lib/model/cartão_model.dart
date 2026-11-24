@@ -7,6 +7,11 @@ class CartaoModel {
     this.numero,
     this.saldo,
   });
+ String formatarSaldo() {
+    final valorFormatado = (saldo ?? 0).toStringAsFixed(2).replaceAll('.',',',
+    );
+    return 'R\$ $valorFormatado';
+  }
 
   CartaoModel.fromJson(Map<String, dynamic> json) {
     numero = json['numero'];
