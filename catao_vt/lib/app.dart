@@ -12,6 +12,18 @@ class CartaoVTApp extends StatelessWidget {
       title: 'CartãoVT Recarga',
       theme: ThemeData(
         primarySwatch: Colors.green,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color.fromARGB(255, 4, 134, 8),
+            foregroundColor: Colors.white,
+          ),
+        ),
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white,
+          ),
+        ),
       ),
       home: const LoginScreen(),
     );

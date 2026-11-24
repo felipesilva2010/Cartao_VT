@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final cartao = CartaoModel(
       numero: double.parse(_numeroController.text),
-      saldo: 0,
+      saldo: 100,
     );
     Navigator.of(context).push(
       MaterialPageRoute<void>(
@@ -39,7 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('CartãoVT Recarga')),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -50,6 +49,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  const Icon(
+                    Icons.directions_bus_filled,
+                    size: 72,
+                    color: Color.fromARGB(255, 201, 187, 64),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'CartãoVT Recarga',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                   const SizedBox(height: 8),
+                  const Text(
+                    'Consulte o saldo e recarregue seu cartão de vale-transporte',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
                   TextFormField(
                     controller: _numeroController,
                     keyboardType: TextInputType.number,
@@ -59,7 +84,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                     decoration: const InputDecoration(
                       labelText: 'Número do cartão',
-                      prefixIcon: Icon(Icons.credit_card),
+                      prefixIcon: Icon(
+                        Icons.credit_card,
+                        color: Colors.blue,
+                      ),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {
@@ -78,7 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     obscureText: true,
                     decoration: const InputDecoration(
                       labelText: 'Senha',
-                      prefixIcon: Icon(Icons.lock),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Color.fromARGB(255, 241, 143, 113),
+                      ),
                       border: OutlineInputBorder(),
                     ),
                     validator: (value) {

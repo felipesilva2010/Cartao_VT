@@ -6,7 +6,7 @@ class RecargaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Recarga')),
+      appBar: AppBar(title: const Text('+ Recarga saldo')),
       body: const Center(child: Text('Tela 3 - Recarga')),
     );
   }
