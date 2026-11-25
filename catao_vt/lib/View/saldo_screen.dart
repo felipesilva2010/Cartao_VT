@@ -3,15 +3,20 @@ import 'package:catao_vt/Controller/saldo_controller.dart';
 import 'package:catao_vt/View/recarga_screen.dart';
 import 'package:catao_vt/model/cartão_model.dart';
 
-class SaldoScreen extends StatelessWidget {
-  SaldoScreen({super.key, required this.cartao})
-    : controller = SaldoController(cartao);
+class SaldoScreen extends StatefulWidget {
+  const SaldoScreen({super.key, required this.cartao});
 
   final CartaoModel cartao;
-  final SaldoController controller;
+
+  @override
+  State<SaldoScreen> createState() => _SaldoScreenState();
+}
+
+class _SaldoScreenState extends State<SaldoScreen> {
+  late final SaldoController controller = SaldoController(widget.cartao);
 
   String get _numeroMascarado {
-    final numero = cartao.numero?.toInt().toString() ?? '';
+    final numero = widget.cartao.numero?.toInt().toString() ?? '';
     final ultimosDigitos = numero.length > 4
         ? numero.substring(numero.length - 4)
         : numero.padLeft(4, '0');
@@ -53,12 +58,17 @@ class SaldoScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => const RecargaScreen(),
-                      ),
-                    );
+                  onPressed: () async {
+                    final recarga = await Navigator.of(context)
+                        .push<Object>(
+                          MaterialPageRoute<Object>(
+                            builder: (_) =>
+                                RecargaScreen(cartao: widget.cartao),
+                          ),
+                        );
+                    if (recarga != null && mounted) {
+                      setState(() {});
+                    }
                   },
                   child: const Text('Recarregar'),
                 ),
