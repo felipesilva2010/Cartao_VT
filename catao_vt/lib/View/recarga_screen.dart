@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:catao_vt/Controller/Recarga_Controller.dart';
-import 'package:catao_vt/View/confirmacao_recarga_screen.dart';
+import 'package:catao_vt/View/pagamento_screen.dart';
 import 'package:catao_vt/model/cartão_model.dart';
 
 class RecargaScreen extends StatefulWidget {
@@ -42,7 +42,7 @@ class _RecargaScreenState extends State<RecargaScreen> {
     final recarga = _controller.confirmarRecarga(_valorSelecionado!);
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => ConfirmacaoRecargaScreen(recarga: recarga),
+        builder: (_) => PagamentoScreen(recarga: recarga),
       ),
     );
   }

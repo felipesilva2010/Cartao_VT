@@ -1,7 +1,9 @@
 import 'package:catao_vt/Controller/Recarga_Controller.dart';
-import 'package:catao_vt/View/confirmacao_recarga_screen.dart';
+import 'package:catao_vt/View/pagamento_screen.dart';
 import 'package:catao_vt/View/saldo_screen.dart';
 import 'package:catao_vt/model/cartão_model.dart';
+import 'package:catao_vt/model/pagamento_model.dart';
+import 'package:catao_vt/model/recarga_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -30,48 +32,86 @@ void main() {
     });
   });
 
-  testWidgets('continuar abre Tela 4 com o valor selecionado', (
-    tester,
-  ) async {
+  testWidgets('continuar abre Tela 4 com o valor selecionado', (tester) async {
     final cartao = CartaoModel(numero: 12345678, saldo: 100);
-    await tester.pumpWidget(
-      MaterialApp(home: SaldoScreen(cartao: cartao)),
-    );
+    await tester.pumpWidget(MaterialApp(home: SaldoScreen(cartao: cartao)));
 
-    await tester.tap(find.text('Recarregar'));
+    await tester.tap(find.text('+ Recarregar saldo'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('R\$ 30'));
     await tester.tap(find.text('Continuar'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ConfirmacaoRecargaScreen), findsOneWidget);
+    expect(find.byType(PagamentoScreen), findsOneWidget);
     expect(find.text('Tela 4 - Confirmar recarga'), findsOneWidget);
     expect(find.text('R\$ 30,00'), findsOneWidget);
     expect(cartao.saldo, 130);
   });
 
-  testWidgets('campo de outro valor rejeita letras e valores abaixo do mínimo', (
+  testWidgets('exibe formas de pagamento com ícones e permite selecioná-las', (
     tester,
   ) async {
-    final cartao = CartaoModel(saldo: 100);
     await tester.pumpWidget(
-      MaterialApp(home: SaldoScreen(cartao: cartao)),
+      MaterialApp(
+        home: PagamentoScreen(
+          recarga: RecargaModel(valor: 30, data: DateTime(2026, 1, 1)),
+        ),
+      ),
     );
 
-    await tester.tap(find.text('Recarregar'));
-    await tester.pumpAndSettle();
+    expect(find.text('Pix'), findsOneWidget);
+    expect(find.text('Cartão de crédito'), findsOneWidget);
+    expect(find.text('Boleto'), findsOneWidget);
+    expect(find.byIcon(Icons.phone_android), findsOneWidget);
+    expect(find.byIcon(Icons.credit_card), findsOneWidget);
+    expect(find.byIcon(Icons.receipt_long), findsOneWidget);
+    expect(find.byType(Divider), findsNWidgets(2));
+    expect(find.byType(TextFormField), findsNothing);
 
-    final campoValor = find.byType(TextFormField);
-    await tester.enterText(campoValor, 'abc');
-    expect(
-      tester.widget<TextFormField>(campoValor).controller!.text,
-      isEmpty,
+    await tester.tap(find.text('Cartão de crédito'));
+    await tester.pump();
+
+    final grupoPagamento = tester.widget<RadioGroup<FormaPagamento>>(
+      find.byType(RadioGroup<FormaPagamento>),
     );
+    expect(grupoPagamento.groupValue, FormaPagamento.cartaoCredito);
+    expect(find.byType(TextFormField), findsNWidgets(3));
+    expect(find.text('Número do cartão'), findsOneWidget);
+    expect(find.text('Validade'), findsOneWidget);
+    expect(find.text('CVV'), findsOneWidget);
+  
+      
+    
 
-    await tester.enterText(campoValor, '5');
-    await tester.tap(find.text('Continuar'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('O valor mínimo da recarga é R\$ 10,00'), findsOneWidget);
+    await tester.tap(find.text('Pix'));
+    await tester.pump();
+    expect(find.byType(TextFormField), findsNothing);
   });
+
+  testWidgets(
+    'campo de outro valor rejeita letras e valores abaixo do mínimo',
+    (tester) async {
+      final cartao = CartaoModel(saldo: 100);
+      await tester.pumpWidget(MaterialApp(home: SaldoScreen(cartao: cartao)));
+
+      await tester.tap(find.text('+ Recarregar saldo'));
+      await tester.pumpAndSettle();
+
+      final campoValor = find.byType(TextFormField);
+      await tester.enterText(campoValor, 'abc');
+      expect(
+        tester.widget<TextFormField>(campoValor).controller!.text,
+        isEmpty,
+      );
+
+      await tester.enterText(campoValor, '5');
+      await tester.tap(find.text('Continuar'));
+      await tester.pumpAndSettle();
+
+      expect(
+        find.text('O valor mínimo da recarga é R\$ 10,00'),
+        findsOneWidget,
+      );
+    },
+  );
 }

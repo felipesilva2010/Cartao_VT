@@ -20,7 +20,7 @@ class _SaldoScreenState extends State<SaldoScreen> {
     final ultimosDigitos = numero.length > 4
         ? numero.substring(numero.length - 4)
         : numero.padLeft(4, '0');
-    return '**** **** $ultimosDigitos';
+    return 'Cartão •••• $ultimosDigitos';
   }
 
   @override
@@ -35,28 +35,45 @@ class _SaldoScreenState extends State<SaldoScreen> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Text(
-                  'Número do cartão',
-                  textAlign: TextAlign.center,
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE5F4EF),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Saldo disponível',
+                        style: TextStyle(
+                          color: Color(0xFF287A5A),
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        controller.saldoFormatado,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Color(0xFF168451),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
                   _numeroMascarado,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: const Color(0xFF36566B),
+                      ),
                 ),
-                const SizedBox(height: 32),
-                const Text(
-                  'Saldo atual',
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  controller.saldoFormatado,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 12),
                 ElevatedButton(
                   onPressed: () async {
                     final recarga = await Navigator.of(context)
@@ -70,7 +87,15 @@ class _SaldoScreenState extends State<SaldoScreen> {
                       setState(() {});
                     }
                   },
-                  child: const Text('Recarregar'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF168451),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                  ),
+                  child: const Text('+ Recarregar saldo'),
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
